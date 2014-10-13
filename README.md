@@ -81,25 +81,6 @@ The recognize method will return an array of `TextBlock` objects, each with an a
 
     )
 
-## Flysystem Adapter
-
-The Evernote OCR package comes with a built in adapter to support the [Flysystem](http://flysystem.thephpleague.com) filesystem library.
-
-``` php
-
-use Estey\EvernoteOCR\Client;
-use Estey\EvernoteOCR\FileAdapters\FlysystemFileAdapter;
-use League\Flysystem\Filesystem;
-use League\Flysystem\Adapter\Local as Adapter;
-
-$filesystem = new Filesystem(new Adapter(__DIR__.'/path/to/root'));
-$adapter = new FlysystemFileAdapter($filesystem);
-$client = new Client('YOUR DEV TOKEN', $adapter);
-
-print_r($client->recognize('path/to/image.jpg'));
-
-```
-
 ## Laravel Filesystem Adapter
 
 If you're using [Laravel](http://laravel.com), there is a service provider available. Open `app/config/app.php`, and add the service provider to the `providers` array. You'll also need to add your [Evernote Dev Token](https://www.evernote.com/api/DeveloperToken.action) to your `.env` file with the key set to `EVERNOTE_DEV_TOKEN`.
