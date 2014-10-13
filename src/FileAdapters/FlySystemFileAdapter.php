@@ -15,12 +15,6 @@ use League\Flysystem\FilesystemInterface;
 class FlySystemFileAdapter extends File implements FileInterface
 {
     /**
-     * File path.
-     * @var string
-     */
-    protected $path;
-
-    /**
      * Filesystem.
      * @var League\Flysystem\FilesystemInterface
      */

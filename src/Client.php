@@ -23,6 +23,12 @@ class Client
     private $client;
 
     /**
+     * File.
+     * @var Estey\EvernoteOCR\FileInterface
+     */
+    private $file;
+
+    /**
      * New Client.
      *
      * @param string $token
@@ -35,8 +41,8 @@ class Client
         FileInterface $file = null,
         Evernote $client = null
     ) {
-        $this->client = $client ?: new Evernote($token, false);
         $this->file = $file ?: new File;
+        $this->client = $client ?: new Evernote($token, false);
     }
 
     /**

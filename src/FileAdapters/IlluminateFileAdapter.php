@@ -15,12 +15,6 @@ use Illuminate\Filesystem\Filesystem;
 class IlluminateFileAdapter extends File implements FileInterface
 {
     /**
-     * File path.
-     * @var string
-     */
-    protected $path;
-
-    /**
      * Filesystem.
      * @var Illuminate\Filesystem\Filesystem
      */
