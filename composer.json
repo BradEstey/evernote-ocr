@@ -1,0 +1,45 @@
+{
+    "name": "estey/evernote-ocr",
+    "description": "Use the Evernote API to perform text recognition (OCR) on an image file.",
+    "keywords": ["evernote", "ocr", "evernote ocr", "text recognition"],
+    "homepage": "http://www.bradestey.com/projects/evernote-ocr",
+    "license": "MIT",
+    "authors": [
+        {
+            "name": "Brad Estey",
+            "email": "me@bradestey.com",
+            "homepage": "http://www.bradestey.com",
+            "role": "Developer"
+        }
+    ],
+    "require": {
+        "php": ">=5.4",
+        "evernote/evernote-cloud-sdk-php": "dev-master"
+    },
+    "require-dev": {
+        "phpunit/phpunit": "~4.0",
+        "mockery/mockery": "~0.9",
+        "league/flysystem": "0.5.*",
+        "illuminate/filesystem": "4.2.*",
+        "squizlabs/php_codesniffer": "~1.5"
+    },
+    "suggest": {
+        "league/flysystem": "Flysystem.",
+        "illuminate/filesystem": "Illuminate Filesystem."
+    },
+    "autoload": {
+        "psr-4": {
+            "Estey\\EvernoteOCR\\": "src"
+        }
+    },
+    "autoload-dev": {
+        "psr-4": {
+            "Estey\\EvernoteOCR\\Test\\": "test"
+        }
+    },
+    "extra": {
+        "branch-alias": {
+            "dev-master": "0.1-dev"
+        }
+    }
+}
