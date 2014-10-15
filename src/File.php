@@ -18,6 +18,12 @@ class File
     protected $path;
 
     /**
+     * Finfo.
+     * @var Finfo
+     */
+    protected $finfo;
+
+    /**
      * Set the file path.
      * 
      * @param string $path
@@ -41,12 +47,14 @@ class File
 
     /**
      * Get the file's mimetype.
-     * 
+     *
      * @return string
      */
     public function getMimetype()
     {
-        $finfo = new Finfo(FILEINFO_MIME_TYPE);
-        return $finfo->file($this->path);
+        if (!$this->finfo) {
+            $this->finfo = new Finfo(FILEINFO_MIME_TYPE);
+        }
+        return $this->finfo->file($this->path);
     }
 }
