@@ -2,10 +2,11 @@
 
 namespace Estey\EvernoteOCR\Test\Unit;
 
+use PHPUnit_Framework_TestCase;
 use Mockery as m;
 use ReflectionClass;
 
-abstract class TestCase
+abstract class TestCase extends PHPUnit_Framework_TestCase
 {
     /**
      * Tear Down
@@ -25,7 +26,7 @@ abstract class TestCase
      */
     public function getStatic($attribute)
     {
-        $reflection = new ReflectionClass(static::$class_name);
+        $reflection = new ReflectionClass(static::$className);
         $property = $reflection->getStaticProperties();
         return $property[$attribute];
     }
@@ -39,7 +40,7 @@ abstract class TestCase
      */
     public function setStatic($attribute, $value)
     {
-        $reflection = new ReflectionClass(static::$class_name);
+        $reflection = new ReflectionClass(static::$className);
         $property = $reflection->getProperty($attribute);
         $property->setAccessible(true);
         $property->setValue(null, $value);
@@ -70,7 +71,7 @@ abstract class TestCase
      */
     public function getProtected($instance, $attribute)
     {
-        $reflection = new ReflectionClass(static::$class_name);
+        $reflection = new ReflectionClass(static::$className);
         $properties = $reflection->getProperties();
         foreach ($properties as $property) {
             if ($property->getName() === $attribute) {
@@ -79,5 +80,21 @@ abstract class TestCase
             }
         }
         return null;
+    }
+
+    /**
+     * Fire a protected method.
+     *
+     * @param mixed $stub
+     * @param string $name
+     * @param array $args
+     * @return mixed
+     */
+    protected function callMethod($stub, $name, array $args)
+    {
+        $reflection = new ReflectionClass(static::$className);
+        $method = $reflection->getMethod($name);
+        $method->setAccessible(true);
+        return $method->invokeArgs($stub, $args);
     }
 }
