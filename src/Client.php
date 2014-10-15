@@ -2,6 +2,8 @@
 
 namespace Estey\EvernoteOCR;
 
+use Exception;
+use Estey\EvernoteOCR\Exceptions\ResourceException;
 use Estey\EvernoteOCR\Exceptions\ImageRecognitionException;
 use Evernote\Client as Evernote;
 use Evernote\Model\Note;
@@ -47,9 +49,10 @@ class Client
 
     /**
      * Pass the location of the file to run text recognition on.
+     * Will return an array of Estey\EvernoteOCR\TextBlock objects.
      * 
      * @param string $filePath
-     * @return Estey\EvernoteOCR\Response
+     * @return array
      */
     public function recognize($filePath)
     {
@@ -75,18 +78,26 @@ class Client
     private function makeResource($filePath)
     {
         $file = $this->file->setPath($filePath);
-        return new Resource($file->getPath(), $file->getMimetype());
+        try {
+            $resource = new Resource($file->getPath(), $file->getMimetype());
+        } catch (Exception $e) {
+            // If an exception occurs, rethrow it as a ResourceException.
+            throw new ResourceException($e->getMessage());
+        }
+
+        return $resource;
     }
 
     /**
      * Make a new note.
      * 
      * @param Evernote\Model\Resource $resource
+     * @param Evernote\Model\Note $note
      * @return Evernote\Model\Note
      */
-    private function makeNote(Resource $resource)
+    private function makeNote(Resource $resource, Note $note = null)
     {
-        $note = new Note;
+        $note = $note ?: new Note;
 
         // Title and content are both required.
         // Only content can be an empty string.
