@@ -11,7 +11,7 @@
          syntaxCheck="false"
 >
     <testsuites>
-        <testsuite name="all">
+        <testsuite name="Evernote OCR Unit Tests">
             <directory suffix="Test.php">test/</directory>
         </testsuite>
     </testsuites>
