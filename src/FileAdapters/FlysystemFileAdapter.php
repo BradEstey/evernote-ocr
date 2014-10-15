@@ -12,7 +12,7 @@ use League\Flysystem\FilesystemInterface;
  * This class is used to adapt the FlySystem file class to implement
  * the File Interface.
  */
-class FlySystemFileAdapter extends File implements FileInterface
+class FlysystemFileAdapter extends File implements FileInterface
 {
     /**
      * Filesystem.
