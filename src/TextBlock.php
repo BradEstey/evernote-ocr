@@ -2,6 +2,8 @@
 
 namespace Estey\EvernoteOCR;
 
+use InvalidArgumentException;
+
 /**
  * Text Block
  *
@@ -61,11 +63,44 @@ class TextBlock
     /**
      * Add a text option to this text block with confidence percentage.
      * 
-     * @param string $text
-     * @param integer $confidence
+     * @param string|Estey\EvernoteOCR\Text $text
+     * @param integer|null $confidence
+     * @return $this
      */
-    public function addText($text, $confidence)
+    public function addText($text, $confidence = null)
     {
-        $this->options[] = new Text($text, $confidence);
+        if (is_object($text)) {
+            return $this->addTextObject($text);
+        }
+
+        if (is_string($text)) {
+            // Throw an exception if $confidence is left empty.
+            if (!$confidence) {
+                throw new InvalidArgumentException(
+                    'Second parameter is required when ' .
+                    'first parameter is a string'
+                );
+            }
+
+            $this->options[] = new Text($text, $confidence);
+            return $this;
+        }
+
+        throw new InvalidArgumentException(
+            'First parameter must be a string or an instance of ' .
+            'Estey\EvernoteOCR\Text'
+        );
+    }
+
+    /**
+     * Add a text object to this text block.
+     * 
+     * @param Estey\EvernoteOCR\Text $text
+     * @return $this
+     */
+    private function addTextObject(Text $text)
+    {
+        $this->options[] = $text;
+        return $this;
     }
 }
