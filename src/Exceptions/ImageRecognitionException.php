@@ -1,6 +1,6 @@
 <?php
 
-namespace Estey\EvernoteOCR;
+namespace Estey\EvernoteOCR\Exceptions;
 
 /**
  * Image Recognition Exception
