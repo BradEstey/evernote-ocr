@@ -2,7 +2,7 @@
 
 namespace Estey\EvernoteOCR;
 
-use InvalidArgumentException;
+use Estey\EvernoteOCR\Exceptions\InvalidArgumentException;
 
 /**
  * Text Block
@@ -66,6 +66,7 @@ class TextBlock
      * @param string|Estey\EvernoteOCR\Text $text
      * @param integer|null $confidence
      * @return $this
+     * @throws Estey\EvernoteOCR\Exceptions\InvalidArgumentException
      */
     public function addText($text, $confidence = null)
     {

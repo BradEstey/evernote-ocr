@@ -89,7 +89,7 @@ class TextBlockTest extends TestCase
     /**
      * Test leaving confidence empty.
      * 
-     * @expectedException InvalidArgumentException
+     * @expectedException Estey\EvernoteOCR\Exceptions\InvalidArgumentException
      */
     public function testAddTextEmptyConfidence()
     {
@@ -99,7 +99,7 @@ class TextBlockTest extends TestCase
     /**
      * Test non-string in the first parameter.
      * 
-     * @expectedException InvalidArgumentException
+     * @expectedException Estey\EvernoteOCR\Exceptions\InvalidArgumentException
      */
     public function testAddTextNotAString()
     {

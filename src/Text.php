@@ -2,7 +2,7 @@
 
 namespace Estey\EvernoteOCR;
 
-use InvalidArgumentException;
+use Estey\EvernoteOCR\Exceptions\InvalidArgumentException;
 
 /**
  * Text
@@ -54,6 +54,7 @@ class Text
      * 
      * @param integer $confidence
      * @return $this
+     * @throws Estey\EvernoteOCR\Exceptions\InvalidArgumentException
      */
     public function setConfidence($confidence)
     {

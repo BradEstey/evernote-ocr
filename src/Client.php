@@ -74,6 +74,7 @@ class Client
      *
      * @param string $filePath
      * @return Evernote\Model\Resource
+     * @throws Estey\EvernoteOCR\Exceptions\ResourceException
      */
     private function makeResource($filePath)
     {
@@ -130,6 +131,7 @@ class Client
      * 
      * @param Evernote\Model\Note $note
      * @return array
+     * @throws Estey\EvernoteOCR\Exceptions\ImageRecognitionException
      */
     private function getRecognition(Note $note)
     {

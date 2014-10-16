@@ -54,7 +54,7 @@ class TextTest extends TestCase
     /**
      * Test setting confidence to a non-integer.
      * 
-     * @expectedException InvalidArgumentException
+     * @expectedException Estey\EvernoteOCR\Exceptions\InvalidArgumentException
      */
     public function testConfidenceNotAnInteger()
     {
@@ -64,7 +64,7 @@ class TextTest extends TestCase
     /**
      * Test setting confidence to more than 100.
      * 
-     * @expectedException InvalidArgumentException
+     * @expectedException Estey\EvernoteOCR\Exceptions\InvalidArgumentException
      */
     public function testConfidenceMoreThan100()
     {
@@ -74,7 +74,7 @@ class TextTest extends TestCase
     /**
      * Test setting confidence to less than 0.
      * 
-     * @expectedException InvalidArgumentException
+     * @expectedException Estey\EvernoteOCR\Exceptions\InvalidArgumentException
      */
     public function testConfidenceLessThan0()
     {
@@ -84,7 +84,7 @@ class TextTest extends TestCase
     /**
      * Test setting confidence as a string.
      * 
-     * @expectedException InvalidArgumentException
+     * @expectedException Estey\EvernoteOCR\Exceptions\InvalidArgumentException
      */
     public function testConfidenceWrongType()
     {
