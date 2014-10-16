@@ -82,7 +82,7 @@ class TextTest extends TestCase
     }
 
     /**
-     * Test setting confidence to less than 0.
+     * Test setting confidence as a string.
      * 
      * @expectedException InvalidArgumentException
      */
