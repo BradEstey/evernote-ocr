@@ -3,7 +3,6 @@
 namespace Estey\EvernoteOCR\Test\Unit;
 
 use Estey\EvernoteOCR\File;
-use Mockery as m;
 
 class FileTest extends TestCase
 {
@@ -13,9 +12,7 @@ class FileTest extends TestCase
     public function setUp()
     {
         parent::setUp();
-
         $this->file = new File();
-        $this->finfo = m::mock('Finfo');
     }
 
     /**
@@ -32,21 +29,5 @@ class FileTest extends TestCase
             $this->file->getPath(),
             'path/to/image.jpg'
         );
-    }
-
-    /**
-     * Test Getting Mimetype.
-     */
-    public function testGetMimetype()
-    {
-        $this->setProtected($this->file, 'finfo', $this->finfo);
-        $this->file->setPath('path/to/image.jpg');
-
-        $this->finfo
-            ->shouldReceive('file')
-            ->once()
-            ->with('path/to/image.jpg')
-            ->andReturn('image/jpeg');
-        $this->assertEquals($this->file->getMimetype(), 'image/jpeg');
     }
 }
