@@ -109,7 +109,9 @@ use Estey\EvernoteOCR\FileAdapters\FlysystemFileAdapter;
 use League\Flysystem\Filesystem;
 use League\Flysystem\Adapter\Local as Adapter;
 
-$filesystem = new Filesystem(new Adapter(__DIR__ . '/path/to/root'));
+$filesystem = new Filesystem(
+    new Adapter(__DIR__ . '/path/to/root/')
+);
 $adapter = new FlysystemFileAdapter($filesystem);
 $client = new Client('YOUR DEV TOKEN', $adapter);
 $response = $client->recognize('path/to/image.jpg');
