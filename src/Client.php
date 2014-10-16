@@ -13,8 +13,8 @@ use Evernote\Model\Resource;
  * Client
  *
  * The client class is the entry point into the Evernote OCR package that
- * manages all of the cllas to the Evernote API and interactions with the
- * Evernote PHP SDK.
+ * manages all of the calls to the interactions with the Evernote PHP SDK,
+ * parses the XML response and returns an array of TextBlock objects.
  */
 class Client
 {
