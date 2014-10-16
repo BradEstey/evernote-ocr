@@ -49,10 +49,10 @@ class Client
 
     /**
      * Pass the location of the file to run text recognition on.
-     * Will return an array of Estey\EvernoteOCR\TextBlock objects.
+     * Returns an array of Estey\EvernoteOCR\TextBlock objects.
      * 
      * @param string $filePath
-     * @return array
+     * @return Estey\EvernoteOCR\TextBlock[]
      */
     public function recognize($filePath)
     {
@@ -128,9 +128,10 @@ class Client
 
     /**
      * Take note and read the text recognition data.
+     * Returns an array of Estey\EvernoteOCR\TextBlock objects.
      * 
      * @param Evernote\Model\Note $note
-     * @return array
+     * @return Estey\EvernoteOCR\TextBlock[]
      * @throws Estey\EvernoteOCR\Exceptions\ImageRecognitionException
      */
     private function getRecognition(Note $note)
@@ -149,10 +150,10 @@ class Client
     }
 
     /**
-     * Parse XML and return an array of TextBlocks.
+     * Parse XML and returns an array of Estey\EvernoteOCR\TextBlock objects.
      * 
      * @param string $xml
-     * @return array
+     * @return Estey\EvernoteOCR\TextBlock[]
      */
     private function parseTextBlocks($xml)
     {
