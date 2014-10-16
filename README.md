@@ -37,7 +37,7 @@ The recognize method will return an array of `TextBlock` objects, each with an a
 
     Array
     (
-        [1] => Estey\EvernoteOCR\TextBlock Object
+        [0] => Estey\EvernoteOCR\TextBlock Object
             (
                 [x] => 51
                 [y] => 82
@@ -55,7 +55,7 @@ The recognize method will return an array of `TextBlock` objects, each with an a
 
             )
 
-        [2] => Estey\EvernoteOCR\TextBlock Object
+        [1] => Estey\EvernoteOCR\TextBlock Object
             (
                 [x] => 370
                 [y] => 87
