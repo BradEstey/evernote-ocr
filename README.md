@@ -1,7 +1,7 @@
 Evernote OCR
 ============
 
-[![Latest Stable Version]](http://img.shields.io/packagist/v/estey/evernote-ocr.svg)](https://packagist.org/packages/estey/evernote-ocr) [![Build Status](https://travis-ci.org/BradEstey/evernote-ocr.svg?branch=master)](https://travis-ci.org/BradEstey/evernote-ocr) [![Coverage Status](https://img.shields.io/coveralls/BradEstey/evernote-ocr.svg)](https://coveralls.io/r/BradEstey/evernote-ocr?branch=master)
+[![Latest Stable Version](http://img.shields.io/packagist/v/estey/evernote-ocr.svg)](https://packagist.org/packages/estey/evernote-ocr) [![Build Status](https://travis-ci.org/BradEstey/evernote-ocr.svg?branch=master)](https://travis-ci.org/BradEstey/evernote-ocr) [![Coverage Status](https://img.shields.io/coveralls/BradEstey/evernote-ocr.svg)](https://coveralls.io/r/BradEstey/evernote-ocr?branch=master)
 
 This is an unofficial library for using the [Evernote](https://evernote.com) API as a means for image text recognition. Please be advised that using the Evernote API solely for the purpose of OCR for your application is a violation of the [API License Agreement](http://dev.evernote.com/documentation/reference/api_license.php).
 
