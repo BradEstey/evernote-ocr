@@ -1,8 +1,12 @@
-# Evernote OCR
+Evernote OCR
+============
+
+[![Latest Stable Version]](http://img.shields.io/packagist/v/estey/evernote-ocr.svg)](https://packagist.org/packages/estey/evernote-ocr) [![Build Status](https://travis-ci.org/BradEstey/evernote-ocr.svg?branch=master)](https://travis-ci.org/BradEstey/evernote-ocr) [![Coverage Status](https://img.shields.io/coveralls/BradEstey/evernote-ocr.svg)](https://coveralls.io/r/BradEstey/evernote-ocr?branch=master)
 
 This is an unofficial library for using the [Evernote](https://evernote.com) API as a means for image text recognition. Please be advised that using the Evernote API solely for the purpose of OCR for your application is a violation of the [API License Agreement](http://dev.evernote.com/documentation/reference/api_license.php).
 
-## Installation
+Installation
+------------
 
 Install this package through Composer by editing your project's `composer.json` file to require `estey/evernote-ocr`.
 
@@ -20,7 +24,8 @@ Then, update Composer:
 
 To get a new Evernote Dev Token, sign in to your account and use this link: [https://www.evernote.com/api/DeveloperToken.action](https://www.evernote.com/api/DeveloperToken.action)
 
-## Usage
+Usage
+-----
 
 ``` php
 
@@ -81,7 +86,8 @@ The recognize method will return an array of `TextBlock` objects, each with an a
 
     )
 
-## Laravel Filesystem Adapter
+Laravel Filesystem Adapter
+--------------------------
 
 If you're using [Laravel](http://laravel.com), there is a service provider available. Open `app/config/app.php`, and add the service provider to the `providers` array. You'll also need to add your [Evernote Dev Token](https://www.evernote.com/api/DeveloperToken.action) to your `.env` file with the key set to `EVERNOTE_DEV_TOKEN`.
 
@@ -98,7 +104,8 @@ print_r($response);
 
 ```
 
-## Flysystem Adapter
+Flysystem Adapter
+-----------------
 
 The Evernote OCR package comes with a built in adapter to support the [Flysystem](http://flysystem.thephpleague.com) filesystem library.
 
