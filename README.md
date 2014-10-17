@@ -127,6 +127,7 @@ print_r($response);
 
 ```
 
-## License
+License
+-------
 
 The MIT License (MIT). Please see [License File](https://github.com/bradestey/evernote-ocr/blob/master/LICENSE) for more information.
