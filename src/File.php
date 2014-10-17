@@ -2,8 +2,6 @@
 
 namespace Estey\EvernoteOCR;
 
-use Finfo;
-
 /**
  * File
  *
@@ -16,12 +14,6 @@ class File
      * @var string
      */
     protected $path;
-
-    /**
-     * Finfo.
-     * @var Finfo
-     */
-    protected $finfo;
 
     /**
      * Set the file path.
@@ -52,9 +44,16 @@ class File
      */
     public function getMimetype()
     {
-        if (!$this->finfo) {
-            $this->finfo = new Finfo(FILEINFO_MIME_TYPE);
+        // Using the finfo function versions because
+        // HHVM has a problem mocking the Finfo class.
+        $finfo = finfo_open(FILEINFO_MIME_TYPE);
+        $mimetype = finfo_file($finfo, $this->path);
+        finfo_close($finfo);
+
+        if (strpos($mimetype, ';') !== false) {
+            list($mimetype, $info) = explode(';', $mimetype);
         }
-        return $this->finfo->file($this->path);
+        
+        return trim($mimetype);
     }
 }
