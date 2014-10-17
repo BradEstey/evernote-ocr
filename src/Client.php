@@ -52,15 +52,22 @@ class Client
      * Returns an array of Estey\EvernoteOCR\TextBlock objects.
      * 
      * @param string $filePath
+     * @param Evernote\Model\Resource $resource
+     * @param Evernote\Model\Note $note
      * @return Estey\EvernoteOCR\TextBlock[]
      */
-    public function recognize($filePath)
-    {
+    public function recognize(
+        $filePath,
+        Resource $resource = null,
+        Note $note = null
+    ) {
         // Create a note resource.
-        $resource = $this->makeResource($filePath);
+        if (!$resource) {
+            $resource = $this->makeResource($filePath);
+        }
 
         // Add the resource to a new Note.
-        $note = $this->makeNote($resource);
+        $note = $this->makeNote($resource, $note);
 
         // Upload note to Evernote API return the note data.
         $note = $this->saveNote($note);

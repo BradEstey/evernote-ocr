@@ -34,6 +34,24 @@ class ClientTest extends TestCase
     }
 
     /**
+     * Test the recognize() method.
+     */
+    public function testRecognize()
+    {
+        $this->makeNote();
+        $this->saveNote();
+        $this->getRecognition();
+
+        $response = $this->client->recognize(
+            'path/to/image.jpg',
+            $this->resource,
+            $this->note
+        );
+
+        $this->verifyResponse($response);
+    }
+
+    /**
      * Test the makeResource() method.
      * 
      * @expectedException Estey\EvernoteOCR\Exceptions\ResourceException
@@ -66,9 +84,9 @@ class ClientTest extends TestCase
     }
 
     /**
-     * Test the makeNote() method.
+     * What fires when makeNote() is called.
      */
-    public function testMakeNote()
+    private function makeNote()
     {
         $this->note
             ->shouldReceive('setTitle')
@@ -84,6 +102,14 @@ class ClientTest extends TestCase
             ->shouldReceive('addResource')
             ->once()
             ->with($this->resource);
+    }
+
+    /**
+     * Test the makeNote() method.
+     */
+    public function testMakeNote()
+    {
+        $this->makeNote();
 
         $note = $this->callMethod(
             $this->client,
@@ -95,9 +121,9 @@ class ClientTest extends TestCase
     }
 
     /**
-     * Test the saveNote() method.
+     * What fires when saveNote() is called.
      */
-    public function testSaveNote()
+    private function saveNote()
     {
         $this->evernote
             ->shouldReceive('uploadNote')
@@ -109,6 +135,14 @@ class ClientTest extends TestCase
             ->shouldReceive('deleteNote')
             ->once()
             ->with($this->note);
+    }
+
+    /**
+     * Test the saveNote() method.
+     */
+    public function testSaveNote()
+    {
+        $this->saveNote();
 
         $note = $this->callMethod(
             $this->client,
@@ -120,36 +154,56 @@ class ClientTest extends TestCase
     }
 
     /**
-     * Test getRecognition() method.
+     * What fires when getRecognition() is called.
+     *
+     * @param array $recognition
      */
-    public function testGetRecognition()
+    private function getRecognition($recognition = null)
     {
+        $recognition = $recognition ?: ['body' => $this->recognition];
+        
         $this->note
             ->shouldReceive('getResources')
             ->once()
             ->andReturn([
                 (object) [
-                    'recognition' => [
-                        'body' => $this->recognition
-                    ]
+                    'recognition' => $recognition
                 ]
             ]);
-        
-        $xml = $this->callMethod(
+    }
+
+    /**
+     * Test getRecognition() method.
+     */
+    public function testGetRecognition()
+    {
+        $this->getRecognition();
+
+        $response = $this->callMethod(
             $this->client,
             'getRecognition',
             [$this->note]
         );
 
-        $this->assertTrue(is_array($xml));
-        $this->assertEquals(count($xml), 2);
-        $text = $xml[0]->options;
+        $this->verifyResponse($response);
+    }
+
+    /**
+     * Verify Response.
+     * 
+     * @param array $response
+     */
+    private function verifyResponse($response)
+    {
+        $this->assertTrue(is_array($response));
+        $this->assertEquals(count($response), 2);
+        $text = $response[0]->options;
         $this->assertEquals($text[0]->text, 'EVER ?');
         $this->assertEquals($text[0]->confidence, 87);
         $this->assertEquals($text[1]->text, 'EVER NOTE');
         $this->assertEquals($text[2]->text, 'EVERNOTE');
 
-        $text = $xml[1]->options;
+        $text = $response[1]->options;
         $this->assertEquals($text[0]->text, 'et');
         $this->assertEquals($text[0]->confidence, 11);
         $this->assertEquals($text[1]->text, 'TQ');
@@ -167,16 +221,8 @@ class ClientTest extends TestCase
      */
     public function testGetRecognitionFails()
     {
-        $this->note
-            ->shouldReceive('getResources')
-            ->once()
-            ->andReturn([
-                (object) [
-                    'recognition' => []
-                ]
-            ]);
-        
-        $xml = $this->callMethod(
+        $this->getRecognition(['foo' => 'bar']);
+        $this->callMethod(
             $this->client,
             'getRecognition',
             [$this->note]

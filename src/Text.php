@@ -69,7 +69,8 @@ class Text
 
     /**
      * Text Length.
-     * 
+     *
+     * @param integer|null $length
      * @return integer|boolean
      */
     public function length($length = null)
