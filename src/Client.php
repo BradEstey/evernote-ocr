@@ -62,10 +62,8 @@ class Client
         Note $note = null
     ) {
         // Create a note resource.
-        if (!$resource) {
-            $resource = $this->makeResource($filePath);
-        }
-
+        $resource = $resource ?: $this->makeResource($filePath);
+        
         // Add the resource to a new Note.
         $note = $this->makeNote($resource, $note);
 
