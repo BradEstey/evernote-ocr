@@ -52,27 +52,54 @@ class ClientTest extends TestCase
     }
 
     /**
-     * Test the makeResource() method.
+     * What should happen when makeResource() is called?
      * 
-     * @expectedException Estey\EvernoteOCR\Exceptions\ResourceException
+     * @param string $image
      */
-    public function testMakeResource()
+    private function makeResource($image)
     {
         $this->file
             ->shouldReceive('setPath')
             ->once()
-            ->with('path/to/image.jpg')
+            ->with($image)
             ->andReturn($this->file);
 
         $this->file
             ->shouldReceive('getPath')
             ->once()
-            ->andReturn('path/to/image.jpg');
+            ->andReturn($image);
 
         $this->file
             ->shouldReceive('getMimetype')
             ->once()
             ->andReturn('image/jpeg');
+    }
+
+    /**
+     * Test the makeResource() method using stub image.
+     */
+    public function testMakeResource()
+    {
+        $stub = __DIR__ . '/../Stubs/image.jpg';
+        $this->makeResource($stub);
+
+        $resource = $this->callMethod(
+            $this->client,
+            'makeResource',
+            [$stub]
+        );
+
+        $this->assertEquals(get_class($resource), 'Evernote\Model\Resource');
+    }
+
+    /**
+     * Test the makeResource() method.
+     * 
+     * @expectedException Estey\EvernoteOCR\Exceptions\ResourceException
+     */
+    public function testMakeResourceFails()
+    {
+        $this->makeResource('path/to/image.jpg');
 
         // This will throw an exception because 'path/to/image.jpg'
         // doesn't exist.

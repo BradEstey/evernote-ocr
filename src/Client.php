@@ -62,8 +62,8 @@ class Client
         Note $note = null
     ) {
         // Create a note resource.
-        $resource = $resource ?: $this->makeResource($filePath);
-        
+        $resource =  $this->makeResource($filePath, $resource);
+
         // Add the resource to a new Note.
         $note = $this->makeNote($resource, $note);
 
@@ -78,17 +78,23 @@ class Client
      * Make an Evernote Resource Model.
      *
      * @param string $filePath
+     * @param Evernote\Model\Resource $resource
      * @return Evernote\Model\Resource
      * @throws Estey\EvernoteOCR\Exceptions\ResourceException
      */
-    private function makeResource($filePath)
+    private function makeResource($filePath, Resource $resource = null)
     {
-        $file = $this->file->setPath($filePath);
-        try {
-            $resource = new Resource($file->getPath(), $file->getMimetype());
-        } catch (Exception $e) {
-            // If an exception occurs, rethrow it as a ResourceException.
-            throw new ResourceException($e->getMessage());
+        if (!$resource) {
+            $file = $this->file->setPath($filePath);
+            try {
+                $resource = new Resource(
+                    $file->getPath(),
+                    $file->getMimetype()
+                );
+            } catch (Exception $e) {
+                // If an exception occurs, rethrow it as a ResourceException.
+                throw new ResourceException($e->getMessage());
+            }
         }
 
         return $resource;
