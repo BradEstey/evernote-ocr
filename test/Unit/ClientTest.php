@@ -21,16 +21,22 @@ class ClientTest extends TestCase
         parent::setUp();
         
         $this->evernote = m::mock('Evernote\Client', [123, false]);
-        $this->file = m::mock('Estey\EvernoteOCR\FileInterface');
+        $this->file = m::mock('Evernote\File\FileInterface');
         $this->note = m::mock('Evernote\Model\Note');
         $this->resource = m::mock('Evernote\Model\Resource');
+        $this->resourceFactory = m::mock('Estey\EvernoteOCR\ResourceFactory');
 
         // Text Recognition Stub.
         $this->recognition = file_get_contents(
             __DIR__ . '/../Stubs/recognition.xml'
         );
 
-        $this->client = new Client(123, $this->file, $this->evernote);
+        $this->client = new Client(
+            123,
+            $this->file,
+            $this->resourceFactory,
+            $this->evernote
+        );
     }
 
     /**
@@ -38,76 +44,21 @@ class ClientTest extends TestCase
      */
     public function testRecognize()
     {
+        $this->resourceFactory
+            ->shouldReceive('make')
+            ->with($this->file)
+            ->andReturn($this->resource);
+
         $this->makeNote();
         $this->saveNote();
         $this->getRecognition();
 
         $response = $this->client->recognize(
-            'path/to/image.jpg',
-            $this->resource,
+            null,
             $this->note
         );
 
         $this->verifyResponse($response);
-    }
-
-    /**
-     * What should happen when makeResource() is called?
-     * 
-     * @param string $image
-     */
-    private function makeResource($image)
-    {
-        $this->file
-            ->shouldReceive('setPath')
-            ->once()
-            ->with($image)
-            ->andReturn($this->file);
-
-        $this->file
-            ->shouldReceive('getPath')
-            ->once()
-            ->andReturn($image);
-
-        $this->file
-            ->shouldReceive('getMimetype')
-            ->once()
-            ->andReturn('image/jpeg');
-    }
-
-    /**
-     * Test the makeResource() method using stub image.
-     */
-    public function testMakeResource()
-    {
-        $stub = __DIR__ . '/../Stubs/image.jpg';
-        $this->makeResource($stub);
-
-        $resource = $this->callMethod(
-            $this->client,
-            'makeResource',
-            [$stub]
-        );
-
-        $this->assertEquals(get_class($resource), 'Evernote\Model\Resource');
-    }
-
-    /**
-     * Test the makeResource() method.
-     * 
-     * @expectedException Estey\EvernoteOCR\Exceptions\ResourceException
-     */
-    public function testMakeResourceFails()
-    {
-        $this->makeResource('path/to/image.jpg');
-
-        // This will throw an exception because 'path/to/image.jpg'
-        // doesn't exist.
-        $resource = $this->callMethod(
-            $this->client,
-            'makeResource',
-            ['path/to/image.jpg']
-        );
     }
 
     /**
@@ -138,7 +89,7 @@ class ClientTest extends TestCase
     {
         $this->makeNote();
 
-        $note = $this->callMethod(
+        $note = $this->callInaccessibleMethod(
             $this->client,
             'makeNote',
             [$this->resource, $this->note]
@@ -171,7 +122,7 @@ class ClientTest extends TestCase
     {
         $this->saveNote();
 
-        $note = $this->callMethod(
+        $note = $this->callInaccessibleMethod(
             $this->client,
             'saveNote',
             [$this->note]
@@ -206,7 +157,7 @@ class ClientTest extends TestCase
     {
         $this->getRecognition();
 
-        $response = $this->callMethod(
+        $response = $this->callInaccessibleMethod(
             $this->client,
             'getRecognition',
             [$this->note]
@@ -249,7 +200,7 @@ class ClientTest extends TestCase
     public function testGetRecognitionFails()
     {
         $this->getRecognition(['foo' => 'bar']);
-        $this->callMethod(
+        $this->callInaccessibleMethod(
             $this->client,
             'getRecognition',
             [$this->note]

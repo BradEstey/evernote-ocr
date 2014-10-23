@@ -4,6 +4,7 @@ namespace Estey\EvernoteOCR\Test\Unit\FileAdapters;
 
 use Estey\EvernoteOCR\FileAdapters\IlluminateFileAdapter;
 use Estey\EvernoteOCR\Test\Unit\TestCase;
+
 use Mockery as m;
 
 class IlluminateFileAdapterTest extends TestCase
@@ -16,34 +17,49 @@ class IlluminateFileAdapterTest extends TestCase
         parent::setUp();
         
         $this->filesystem = m::mock('Illuminate\Filesystem\Filesystem');
-        $this->file = new IlluminateFileAdapter($this->filesystem);
+        $this->file = new IlluminateFileAdapter(
+            '/path/to/image.jpg',
+            $this->filesystem
+        );
     }
 
     /**
-     * Test Setting and Getting Path.
+     * Test getContent() method.
      */
-    public function testSetAndGetPath()
+    public function testGetContent()
     {
-        $this->assertEquals(
-            $this->file->setPath('path/to/image.jpg'),
-            $this->file
-        );
+        $this->filesystem
+            ->shouldReceive('get')
+            ->once()
+            ->andReturn('foobar');
 
-        $this->assertEquals(
-            $this->file->getPath(),
-            'path/to/image.jpg'
-        );
+        $this->assertEquals($this->file->getContent(), 'foobar');
     }
 
     /**
-     * Test Getting Mimetype.
+     * Test getFilename() method.
+     */
+    public function testGetFilename()
+    {
+        $this->assertEquals($this->file->getFilename(), 'image.jpg');
+    }
+
+    /**
+     * Test getMimetype() method.
      */
     public function testGetMimetype()
     {
-        $this->file->setPath('image/jpeg ; foo:bar');
+        $this->filesystem
+            ->shouldReceive('get')
+            ->once()
+            ->andReturn(file_get_contents(__DIR__ . '/../../Stubs/image.jpg'));
+
         $this->assertEquals($this->file->getMimetype(), 'image/jpeg');
 
-        $this->file->setPath('image/png');
-        $this->assertEquals($this->file->getMimetype(), 'image/png');
+        $this->filesystem
+            ->shouldReceive('get')
+            ->once()
+            ->andReturn('Plain text file.');
+        $this->assertEquals($this->file->getMimetype(), 'text/plain');
     }
 }

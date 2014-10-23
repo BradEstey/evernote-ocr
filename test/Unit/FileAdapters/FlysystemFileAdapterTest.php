@@ -17,27 +17,31 @@ class FlysystemFileAdapterTest extends TestCase
         
         $this->flysystem = m::mock('League\Flysystem\FilesystemInterface');
         $this->adapter = m::mock('League\Flysystem\AdapterInterface');
-        $this->file = new FlysystemFileAdapter($this->flysystem);
+        $this->file = new FlysystemFileAdapter(
+            '/path/to/img.jpg',
+            $this->flysystem
+        );
     }
 
     /**
-     * Test getPath() method.
+     * Test getContent() method.
      */
-    public function testGetPath()
+    public function testGetContent()
     {
-        $this->file->setPath('/to/image.jpg');
-
         $this->flysystem
-            ->shouldReceive('getAdapter')
+            ->shouldReceive('read')
             ->once()
-            ->andReturn($this->adapter);
+            ->andReturn('foobar');
 
-        $this->adapter
-            ->shouldReceive('getPathPrefix')
-            ->once()
-            ->andReturn('/full/path');
+        $this->assertEquals($this->file->getContent(), 'foobar');
+    }
 
-        $this->assertEquals($this->file->getPath(), '/full/path/to/image.jpg');
+    /**
+     * Test getFilename() method.
+     */
+    public function testGetFilename()
+    {
+        $this->assertEquals($this->file->getFilename(), 'img.jpg');
     }
 
     /**

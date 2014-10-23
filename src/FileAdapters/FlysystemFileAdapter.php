@@ -2,17 +2,16 @@
 
 namespace Estey\EvernoteOCR\FileAdapters;
 
-use Estey\EvernoteOCR\File;
-use Estey\EvernoteOCR\FileInterface;
+use Evernote\File\FileInterface;
 use League\Flysystem\FilesystemInterface;
 
 /**
  * FlySystem File Adapter
  *
- * This class is used to adapt the FlySystem file class to implement
- * the File Interface.
+ * This class is used to adapt the FlySystem filesystem class to implement
+ * the Evernote\File\FileInterface.
  */
-class FlysystemFileAdapter extends File implements FileInterface
+class FlysystemFileAdapter implements FileInterface
 {
     /**
      * Filesystem.
@@ -21,25 +20,43 @@ class FlysystemFileAdapter extends File implements FileInterface
     protected $filesystem;
 
     /**
-     * FlySystem File Class.
-     * 
-     * @param League\Flysystem\FilesystemInterface $filesystem
+     * File Path.
+     * @var string
      */
-    public function __construct(
-        FilesystemInterface $filesystem = null
-    ) {
+    protected $path;
+
+    /**
+     * FlySystem File Adapter Class.
+     * 
+     * @param string $path
+     * @param League\Flysystem\FilesystemInterface $filesystem
+     * @return void
+     */
+    public function __construct($path, FilesystemInterface $filesystem)
+    {
+        $this->path = $path;
         $this->filesystem = $filesystem;
     }
 
     /**
-     * Get full file path.
+     * Get the filename.
      * 
      * @return string
      */
-    public function getPath()
+    public function getFilename()
     {
-        $pathPrefix = $this->filesystem->getAdapter()->getPathPrefix();
-        return $pathPrefix . $this->path;
+        $path = explode(DIRECTORY_SEPARATOR, $this->path);
+        return array_pop($path);
+    }
+
+    /**
+     * Get the file's content.
+     * 
+     * @return string
+     */
+    public function getContent()
+    {
+        return $this->filesystem->read($this->path);
     }
 
     /**

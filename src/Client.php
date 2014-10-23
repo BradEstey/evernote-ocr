@@ -3,11 +3,13 @@
 namespace Estey\EvernoteOCR;
 
 use Exception;
-use Estey\EvernoteOCR\Exceptions\ResourceException;
+use Estey\EvernoteOCR\ResourceFactory;
 use Estey\EvernoteOCR\Exceptions\ImageRecognitionException;
 use Evernote\Client as Evernote;
 use Evernote\Model\Note;
 use Evernote\Model\Resource;
+use Evernote\File\FileInterface;
+use Evernote\File\File;
 
 /**
  * Client
@@ -26,24 +28,33 @@ class Client
 
     /**
      * File.
-     * @var Estey\EvernoteOCR\FileInterface
+     * @var Evernote\File\FileInterface
      */
     private $file;
+
+    /**
+     * Resource Factory.
+     * @var Estey\EvernoteOCR\ResourceFactory
+     */
+    private $resource_factory;
 
     /**
      * New Client.
      *
      * @param string $token
-     * @param Estey\EvernoteOCR\FileInterface $file
+     * @param Evernote\File\FileInterface $file
+     * @param Estey\EvernoteOCR\ResourceFactory $resource_factory
      * @param Evernote\Client $client
      * @return void
      */
     public function __construct(
         $token,
         FileInterface $file = null,
+        ResourceFactory $resource_factory = null,
         Evernote $client = null
     ) {
-        $this->file = $file ?: new File;
+        $this->file = $file;
+        $this->resource_factory = $resource_factory ?: new ResourceFactory;
         $this->client = $client ?: new Evernote($token, false);
     }
 
@@ -51,18 +62,18 @@ class Client
      * Pass the location of the file to run text recognition on.
      * Returns an array of Estey\EvernoteOCR\TextBlock objects.
      * 
-     * @param string $filePath
-     * @param Evernote\Model\Resource $resource
+     * @param string $path
      * @param Evernote\Model\Note $note
      * @return Estey\EvernoteOCR\TextBlock[]
      */
-    public function recognize(
-        $filePath,
-        Resource $resource = null,
-        Note $note = null
-    ) {
+    public function recognize($path = null, Note $note = null)
+    {
+        if (!$this->file instanceof FileInterface) {
+            $this->file = new File($path);
+        }
+
         // Create a note resource.
-        $resource =  $this->makeResource($filePath, $resource);
+        $resource = $this->resource_factory->make($this->file);
 
         // Add the resource to a new Note.
         $note = $this->makeNote($resource, $note);
@@ -75,33 +86,7 @@ class Client
     }
 
     /**
-     * Make an Evernote Resource Model.
-     *
-     * @param string $filePath
-     * @param Evernote\Model\Resource $resource
-     * @return Evernote\Model\Resource
-     * @throws Estey\EvernoteOCR\Exceptions\ResourceException
-     */
-    private function makeResource($filePath, Resource $resource = null)
-    {
-        if (!$resource) {
-            $file = $this->file->setPath($filePath);
-            try {
-                $resource = new Resource(
-                    $file->getPath(),
-                    $file->getMimetype()
-                );
-            } catch (Exception $e) {
-                // If an exception occurs, rethrow it as a ResourceException.
-                throw new ResourceException($e->getMessage());
-            }
-        }
-
-        return $resource;
-    }
-
-    /**
-     * Make a new note.
+     * Make a new note or append to a note that has already been created.
      * 
      * @param Evernote\Model\Resource $resource
      * @param Evernote\Model\Note $note

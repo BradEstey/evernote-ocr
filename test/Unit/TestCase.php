@@ -18,43 +18,16 @@ abstract class TestCase extends PHPUnit_Framework_TestCase
         m::close();
     }
 
-    /**
-     * Get the value of a static attribute.
-     *
-     * @param string $attribute
-     * @return void
-     */
-    public function getStatic($attribute)
-    {
-        $reflection = new ReflectionClass(static::$className);
-        $property = $reflection->getStaticProperties();
-        return $property[$attribute];
-    }
 
     /**
-     * Set the value of a static attribute.
-     *
-     * @param string $attribute
-     * @param string $value
-     * @return void
-     */
-    public function setStatic($attribute, $value)
-    {
-        $reflection = new ReflectionClass(static::$className);
-        $property = $reflection->getProperty($attribute);
-        $property->setAccessible(true);
-        $property->setValue(null, $value);
-    }
-
-    /**
-     * Set the value of a protected attribute.
+     * Set the value of a protected, private or static attribute.
      *
      * @param object $instance
      * @param string $attribute
-     * @param string $value
+     * @param mixed $value
      * @return void
      */
-    public function setProtected($instance, $attribute, $value)
+    public function setInaccessible($instance, $attribute, $value)
     {
         $reflection = new ReflectionClass($instance);
         $property = $reflection->getProperty($attribute);
@@ -63,15 +36,15 @@ abstract class TestCase extends PHPUnit_Framework_TestCase
     }
 
     /**
-     * Get the value of a protected attribute.
+     * Get the value of a protected, private or static attribute.
      *
      * @param object $instance
      * @param string $attribute
-     * @return void
+     * @return mixed
      */
-    public function getProtected($instance, $attribute)
+    public function getInaccessible($instance, $attribute)
     {
-        $reflection = new ReflectionClass(static::$className);
+        $reflection = new ReflectionClass($instance);
         $properties = $reflection->getProperties();
         foreach ($properties as $property) {
             if ($property->getName() === $attribute) {
@@ -83,18 +56,18 @@ abstract class TestCase extends PHPUnit_Framework_TestCase
     }
 
     /**
-     * Fire a protected method.
+     * Fire a protected or private method.
      *
-     * @param mixed $stub
+     * @param object $instance
      * @param string $name
      * @param array $args
      * @return mixed
      */
-    protected function callMethod($stub, $name, array $args)
+    protected function callInaccessibleMethod($instance, $name, array $args)
     {
-        $reflection = new ReflectionClass(static::$className);
+        $reflection = new ReflectionClass($instance);
         $method = $reflection->getMethod($name);
         $method->setAccessible(true);
-        return $method->invokeArgs($stub, $args);
+        return $method->invokeArgs($instance, $args);
     }
 }

@@ -20,10 +20,10 @@ class EvernoteOCRServiceProvider extends ServiceProvider
      */
     public function register()
     {
-        $this->app->bindShared('evernote_ocr', function ($app) {
+        $this->app->bind('evernote_ocr', function ($app, $params) {
             return new Client(
                 getenv('EVERNOTE_DEV_TOKEN'),
-                new IlluminateFileAdapter($app['files'])
+                new IlluminateFileAdapter($params[0], $app['files'])
             );
         });
     }
