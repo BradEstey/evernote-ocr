@@ -13,7 +13,7 @@ Install this package through Composer by editing your project's `composer.json` 
 ``` json
 {
     "require": {
-        "estey/evernote-ocr": "0.2.*"
+        "estey/evernote-ocr": "0.1.*"
     }
 }
 ``` 
