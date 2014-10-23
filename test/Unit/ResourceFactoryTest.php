@@ -3,7 +3,6 @@
 namespace Estey\EvernoteOCR\Test\Unit;
 
 use Estey\EvernoteOCR\ResourceFactory;
-use Estey\EvernoteOCR\Exceptions\ResourceException;
 use Mockery as m;
 
 class ResourceFactoryTest extends TestCase
@@ -22,9 +21,6 @@ class ResourceFactoryTest extends TestCase
         parent::setUp();
 
         $this->file = m::mock('Evernote\File\FileInterface');
-        $this->exception = m::mock(
-            'Estey\EvernoteOCR\Exceptions\ResourceException'
-        );
         $this->stub = new ResourceFactory;
     }
 
@@ -60,7 +56,7 @@ class ResourceFactoryTest extends TestCase
         $this->file
             ->shouldReceive('getContent')
             ->once()
-            ->andThrow($this->exception);
+            ->andThrow(new \Estey\EvernoteOCR\Exceptions\ResourceException);
         $this->stub->make($this->file);
     }
 }
