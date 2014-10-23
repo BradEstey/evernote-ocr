@@ -13,7 +13,7 @@ Install this package through Composer by editing your project's `composer.json` 
 ``` json
 {
     "require": {
-        "estey/evernote-ocr": "0.1.*"
+        "estey/evernote-ocr": "0.2.*"
     }
 }
 ``` 
@@ -97,8 +97,8 @@ Use it like so:
 
 ``` php
 
-$client = App::make('evernote_ocr');
-$response = $client->recognize('path/to/image.jpg');
+$client = App::make('evernote_ocr', ['path/to/image.jpg']);
+$response = $client->recognize();
 
 print_r($response);
 
@@ -119,9 +119,10 @@ use League\Flysystem\Adapter\Local as Adapter;
 $filesystem = new Filesystem(
     new Adapter(__DIR__ . '/path/to/root/')
 );
-$adapter = new FlysystemFileAdapter($filesystem);
-$client = new Client('YOUR DEV TOKEN', $adapter);
-$response = $client->recognize('path/to/image.jpg');
+
+$client = new Client('YOUR DEV TOKEN');
+$file = new FlysystemFileAdapter('path/to/image.jpg', $filesystem);
+$response = $client->recognize($file);
 
 print_r($response);
 
