@@ -8,7 +8,7 @@ This is an unofficial library for using the [Evernote](https://evernote.com) API
 Installation
 ------------
 
-Install this package through Composer by editing your project's `composer.json` file to require `estey/evernote-ocr`.
+Install this package through [Composer](https://getcomposer.org) by editing your project's `composer.json` file to require `estey/evernote-ocr`.
 
 ``` json
 {
