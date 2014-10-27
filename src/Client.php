@@ -154,7 +154,7 @@ class Client
     private function parseTextBlocks($xml)
     {
         $data = [];
-        $currentItem = 0;
+        $current_item = 0;
 
         $parser = xml_parser_create();
         xml_parse_into_struct($parser, $xml, $elements, $index);
@@ -162,7 +162,7 @@ class Client
     
         foreach ($elements as $element) {
             if ($element['tag'] === 'ITEM' and $element['type'] === 'open') {
-                $data[$currentItem] = new TextBlock(
+                $data[$current_item] = new TextBlock(
                     (integer) $element['attributes']['X'],
                     (integer) $element['attributes']['Y'],
                     (integer) $element['attributes']['W'],
@@ -172,12 +172,12 @@ class Client
             }
 
             if ($element['tag'] === 'ITEM' and $element['type'] === 'close') {
-                $currentItem++;
+                $current_item++;
                 continue;
             }
 
             if ($element['tag'] === 'T') {
-                $data[$currentItem]->addText(
+                $data[$current_item]->addText(
                     (string) $element['value'],
                     (integer) $element['attributes']['W']
                 );
